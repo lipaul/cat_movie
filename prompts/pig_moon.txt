@@ -1,0 +1,26 @@
+subject_definitions:
+<Picture 1> is the opening composition anchor for [Shot 1]: a photorealistic real pig with natural four-legged pig anatomy and pink bristle texture, sitting upright on its haunches on the grass in a night-time garden set, its front hooves holding a small pink teacup, head tilted back looking up at a big golden full moon, with a red-roofed cottage with a warm yellow lit window, a low wooden fence and small white flowers behind it.
+<Picture 2> is a second composition reference for [Shot 1]: the same realistic pig standing on all four legs on the grass, its head raised looking up at the moon, with a small pink teacup resting on the grass in front of it.
+<Subject 1> is the realistic pig whose appearance comes from <Picture 1> and <Picture 2>, with natural four-legged pig anatomy, pink skin, coarse bristle texture, a real pig snout and ears.
+<Subject 2> is the large mother pig whose appearance comes from <Picture 3>, a realistic pig with pink bristle texture.
+<Subject 3> is the small piglet whose appearance comes from <Picture 3>, a realistic baby pig with pink skin.
+
+summary:
+[reference generation] The target video is one continuous photorealistic night-time shot that opens on a real pig sitting up and holding a small pink teacup as it looks up at a big golden full moon, then the camera slowly pulls back as the pig settles onto all four legs, revealing a mother pig and a piglet beside it on the grass in front of a red-roofed cottage, all looking up at the moon; the three pigs "speak" in Chinese.
+
+retention_analysis:
+<Picture 1> ([Shot 1] opening composition): fully_preserved - the night sky with the big golden full moon, the realistic pig holding the teacup with its head tilted back, the red-roofed cottage with a warm yellow window, the wooden fence and the flowers are retained as the opening.
+<Picture 2> ([Shot 1] later composition): fully_preserved - the realistic pig on all four legs with the teacup on the grass is retained after the pull-back.
+<Subject 1> (appears in [Shot 1]): fully_preserved - the natural four-legged pig anatomy and the pink bristle texture are retained.
+<Subject 2> (appears in [Shot 1]): fully_preserved - the large mother pig with pink bristle texture is retained.
+<Subject 3> (appears in [Shot 1]): fully_preserved - the small piglet with pink skin is retained.
+
+detailed_description:
+The target video is a photorealistic night-time garden scene with cinematic moonlight and a warm, gentle mood.
+[Shot 1] The shot opens on the composition of <Picture 1>: a real pig sits upright on its haunches on the grass, its front hooves holding a small pink teacup, its head tilted back as it looks up at a huge round golden full moon in a deep blue sky with a few stars, its mouth slightly open as if asking a question. Behind it a red-roofed cottage shows a warm yellow lit window and a low wooden fence, with small white flowers in the grass. <Subject 1> (S1) asks in a bright, curious child's voice, <d>[Chinese] 月亮月亮，你今天为什么这么圆呀？</d> The camera then pulls back slowly and rises gently; as it does, the pig lowers onto all four legs on the grass, matching the pose of <Picture 2>, and the wider shot reveals <Subject 2>, a large mother pig, and <Subject 3>, a small piglet, standing on the grass on either side, both also looking up at the moon. <Subject 2> (S2) answers warmly in a gentle adult voice, <d>[Chinese] 一定是月亮今天特别开心！</d> <Subject 3> (S3) says in a small sweet voice, <d>[Chinese] 哇……月亮！</d> The three pigs stand together on the grass looking up at the moon as the camera settles into a medium shot and holds through the final frame. No text, no subtitles, no watermark.
+
+overall_soundscape:
+Quiet night ambience with soft crickets, a very light breeze over the grass and a faint rustle of leaves continues throughout.
+
+non_diegetic_music:
+A gentle music-box lullaby at a slow tempo with soft glockenspiel and warm sustained strings, very quiet and dreamy.

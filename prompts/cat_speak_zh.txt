@@ -1,0 +1,19 @@
+subject_definitions:
+<Subject 1> is the anthropomorphic fat orange tabby cat in <Picture 1>, <Picture 2>, and <Picture 3>, with a chubby body, a round face, amber eyes, fluffy orange fur with darker tabby stripes, a cream muzzle and belly, a thick fluffy tail, and an upright bipedal anthro posture.
+
+summary:
+[reference generation] The target video shows <Subject 1> standing in a neutral studio, waving its paw at the camera and speaking a short Chinese greeting in a warm, friendly voice, then smiling.
+
+retention_analysis:
+<Subject 1> (appears in [Shot 1], [Shot 2]): fully_preserved - the orange tabby fur, chubby body, round face, amber eyes, cream muzzle and upright bipedal posture are retained.
+
+detailed_description:
+The target video is in a photorealistic studio style with soft cinematic lighting and a neutral grey background.
+[Shot 1] A medium shot frames <Subject 1>, the anthropomorphic fat orange tabby cat from the references, standing upright on its hind legs in the centre of the frame. It raises its right front paw and waves at the camera while its mouth opens in sync with speech. <Subject 1> (S1) speaks in a warm, friendly, slightly playful young voice, <d>[Chinese] 大家好，我是胖橘！</d> It closes its mouth into a soft smile and lowers its paw.
+[Shot 2] At 00:03.000, the shot cuts to a closer medium close-up of <Subject 1> (S1), the same cat, its amber eyes looking directly into the camera. <Subject 1> (S1) continues in the same warm friendly voice, <d>[Chinese] 今天也要开开心心的哦！</d> Its mouth moves naturally with the words, then settles into a bright smile and it tilts its head slightly.
+
+overall_soundscape:
+A quiet studio room tone with a very faint air-conditioning hum continues throughout.
+
+non_diegetic_music:
+A gentle, warm acoustic ukulele melody at a slow tempo plays softly underneath.

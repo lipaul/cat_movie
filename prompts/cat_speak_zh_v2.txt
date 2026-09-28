@@ -1,0 +1,22 @@
+subject_definitions:
+<Subject 1> is the anthropomorphic fat orange tabby cat in <Picture 1>, <Picture 2>, and <Picture 3>, with a chubby body, a round face, amber eyes, fluffy orange fur with darker tabby stripes, a cream muzzle and belly, a thick fluffy tail, and an upright bipedal anthro posture.
+<Audio 1> is the voice-timbre reference for <Subject 1> (S1), containing a spoken Chinese vocal layer.
+
+summary:
+[reference generation + audio reference] The target video shows <Subject 1> standing in a neutral studio across three closer shots, greeting the viewer, introducing itself, and wishing them well in Chinese, with the same warm friendly voice timbre referenced from <Audio 1>.
+
+retention_analysis:
+<Subject 1> (appears in [Shot 1], [Shot 2], [Shot 3]): fully_preserved - the orange tabby fur, chubby body, round face, amber eyes, cream muzzle and upright bipedal posture are retained.
+<Audio 1>: reference - its vocal timbre guides the Chinese dialogue delivery of <Subject 1> (S1) without copying the original signal.
+
+detailed_description:
+The target video is in a photorealistic studio style with soft cinematic lighting and a neutral grey background.
+[Shot 1] A medium shot frames <Subject 1>, the anthropomorphic fat orange tabby cat from the references, standing upright on its hind legs in the centre of the frame. It raises its right front paw and waves at the camera while its mouth opens in sync with speech. <Subject 1> (S1) speaks in a warm, friendly, slightly playful young voice, following the timbre referenced from <Audio 1>, <d>[Chinese] 嗨，又见面啦！</d> It closes its mouth into a soft smile and lowers its paw.
+[Shot 2] At 00:02.200, the shot cuts to a closer medium close-up of <Subject 1> (S1), the same cat, its amber eyes looking directly into the camera. <Subject 1> (S1) continues in the same warm friendly voice referenced from <Audio 1>, <d>[Chinese] 我还是那只胖橘猫。</d> Its mouth moves naturally with the words, then it blinks slowly.
+[Shot 3] At 00:04.400, the shot cuts to a tight close-up of <Subject 1> (S1), the same cat, filling the frame. It tilts its head slightly and speaks again in the same warm friendly voice, <d>[Chinese] 记得每天都要开心哦！</d> Its mouth moves with the words, then settles into a bright open-mouthed smile and it holds the pose through the final frame.
+
+overall_soundscape:
+A quiet studio room tone with a very faint air-conditioning hum continues throughout.
+
+non_diegetic_music:
+A gentle, warm acoustic ukulele melody at a slow tempo plays softly underneath.

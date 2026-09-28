@@ -1,0 +1,30 @@
+# ---- environments / tools (not source) ----
+env/
+ComfyUI/
+models/
+.cache/
+output/
+
+# ---- python ----
+__pycache__/
+*.py[cod]
+
+# ---- heavy / regenerable artifacts ----
+h3_ref2va/cache/
+h3_ref2va/golden/
+*.pt
+
+# ---- video intermediates (keep dudu_full / shots / the main deliverables) ----
+video/post/
+video/test_*
+video/t2va_*
+video/diff_*
+video/diffusers_t2va_544.mp4
+video/ltx_f*.mp4
+video/ltx_spike*
+video/ltx_dialog*
+video/smoke_*
+video/known_good_*
+video/*_frames.png
+video/*_grid.png
+video/*.wav

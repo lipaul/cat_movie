@@ -1,0 +1,24 @@
+subject_definitions:
+<Picture 1> is the opening composition anchor for [Shot 1]: a tight night-time close-up of a small pink claymation pig in a pink dress, holding a small pink teacup, tilting her head back to look up at a big golden full moon in a deep blue sky, with a red-roofed house with a warm yellow window blurred in the background.
+<Subject 1> is Peppa, the cheerful pink cartoon pig whose appearance comes from <Picture 2>, wearing a pink dress, with a round pink face, a snout, dark eyes and a small curly tail, in a soft claymation style.
+<Subject 2> is Suzy, the friendly white sheep whose appearance comes from <Picture 2>, with a fluffy cream fleece and small dark hooves, standing upright.
+<Subject 3> is George, the small pink cartoon pig whose appearance comes from <Picture 2>, Peppa's little brother, holding a small pink teacup.
+
+summary:
+[reference generation] The target video is one continuous shot that opens as a close-up of <Subject 1> holding a small pink teacup and looking up at a big golden full moon, then the camera slowly pulls back to a medium shot revealing <Subject 2> and <Subject 3> standing beside her on the grass in front of the red-roofed house, all looking up at the moon; the three characters speak in Chinese.
+
+retention_analysis:
+<Picture 1> ([Shot 1] opening composition): fully_preserved - the night sky with the big golden full moon, the pink pig holding the teacup with her head tilted back, and the blurred red-roofed house with a warm yellow window are retained as the opening.
+<Subject 1> (appears in [Shot 1]): fully_preserved - Peppa's pink dress, round pink face, snout, dark eyes and curly tail are retained.
+<Subject 2> (appears in [Shot 1]): fully_preserved - the fluffy cream fleece and upright posture are retained.
+<Subject 3> (appears in [Shot 1]): fully_preserved - the small pink body and the small pink teacup are retained.
+
+detailed_description:
+The target video is in a cute claymation cartoon style with bright soft colours, set at night under a deep blue sky with a big round golden full moon and a few twinkling stars.
+[Shot 1] The shot opens on the composition of <Picture 1>: a close-up of <Subject 1>, Peppa, the small pink claymation pig in a pink dress, standing on the grass with a red-roofed house blurred behind her. She holds a small pink teacup of apple juice up near her chest and tilts her head back to look up at the big golden full moon, her mouth slightly open as if asking a question, with a curious and cute expression. The camera then pulls back slowly and rises gently, revealing <Subject 2>, Suzy the white sheep, and <Subject 3>, George the small pink pig holding his own small teacup, standing on either side of Peppa on the grass and also looking up at the moon. Warm yellow light glows from the window of the red-roofed house behind them, and the moonlight falls softly on all three of them. <Subject 1> (S1) asks in a bright, curious child's voice, <d>[Chinese] 月亮月亮，你今天为什么这么圆呀？</d> She keeps her head tilted back with her mouth slightly open. <Subject 2> (S2) answers cheerfully in a warm child's voice, <d>[Chinese] 一定是月亮今天特别开心！</d> <Subject 3> (S3) says in a small sweet voice, <d>[Chinese] 哇……月亮！</d> The three of them stand together on the grass looking up at the moon as the camera settles into a medium shot and holds through the final frame. No text, no subtitles, no watermark.
+
+overall_soundscape:
+Quiet night ambience with soft crickets, a very light breeze over the grass and a faint rustle of leaves continues throughout.
+
+non_diegetic_music:
+A gentle music-box lullaby at a slow tempo with soft glockenspiel and warm sustained strings, very quiet and dreamy.
