@@ -10,8 +10,10 @@
 #   ./run.sh t2i     <args...>     FLUX.2 文生图       → h3_ref2va/comfy_t2i.py
 #   ./run.sh keyframes [names...]  批量关键帧           → h3_ref2va/gen_keyframes.py
 #   ./run.sh ltx     <args...>     LTX-2.5 图生视频     → h3_ref2va/comfy_ltx_i2v.py
+#   ./run.sh flf2v   <args...>     LTX-2.5 首尾帧(接续) → h3_ref2va/comfy_ltx_flf2v.py
 #   ./run.sh shots   [names...]    批量逐镜动画         → h3_ref2va/gen_shots.py
-#   ./run.sh post                  拼接+BGM+字幕        → h3_ref2va/post_production.py
+#   ./run.sh subs                  重建字幕(语音对齐)   → h3_ref2va/gen_subs.py
+#   ./run.sh post                  拼接+BGM+字幕+调色   → h3_ref2va/post_production.py
 #   ./run.sh inspect <file> [...]  抽帧/转写抽检        → h3_ref2va/inspect_av.py
 #   ./run.sh ref2va  <args...>     H3 ref2va（env/h3）  → h3_ref2va/diffusers_ref2va.py
 #
@@ -75,7 +77,9 @@ cmd_verify() {
 cmd_t2i()       { need_comfy_py; "$COMFY_PY" h3_ref2va/comfy_t2i.py "$@"; }
 cmd_keyframes() { need_comfy_py; "$COMFY_PY" h3_ref2va/gen_keyframes.py "$@"; }
 cmd_ltx()       { need_comfy_py; "$COMFY_PY" h3_ref2va/comfy_ltx_i2v.py "$@"; }
+cmd_flf2v()     { need_comfy_py; "$COMFY_PY" h3_ref2va/comfy_ltx_flf2v.py "$@"; }
 cmd_shots()     { need_comfy_py; "$COMFY_PY" h3_ref2va/gen_shots.py "$@"; }
+cmd_subs()      { need_comfy_py; "$COMFY_PY" h3_ref2va/gen_subs.py "$@"; }
 cmd_post()      { need_comfy_py; "$COMFY_PY" h3_ref2va/post_production.py "$@"; }
 cmd_inspect()   { need_comfy_py; "$COMFY_PY" h3_ref2va/inspect_av.py "$@"; }
 cmd_ref2va()    { need_h3_py;    "$H3_PY"    h3_ref2va/diffusers_ref2va.py "$@"; }
@@ -90,7 +94,9 @@ case "${1:-}" in
   t2i)       shift; cmd_t2i "$@" ;;
   keyframes) shift; cmd_keyframes "$@" ;;
   ltx)       shift; cmd_ltx "$@" ;;
+  flf2v)     shift; cmd_flf2v "$@" ;;
   shots)     shift; cmd_shots "$@" ;;
+  subs)      shift; cmd_subs "$@" ;;
   post)      shift; cmd_post "$@" ;;
   inspect)   shift; cmd_inspect "$@" ;;
   ref2va)    shift; cmd_ref2va "$@" ;;

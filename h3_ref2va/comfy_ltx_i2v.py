@@ -26,11 +26,14 @@ HOST = "http://127.0.0.1:8188"
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 COMFY = os.path.join(ROOT, "ComfyUI")
 
-NEG = "blurry, out of focus, overexposed, underexposed, low contrast, washed out colors, excessive noise, grainy texture, distorted anatomy, extra limbs, text, watermark"
+NEG = ("blurry, out of focus, overexposed, underexposed, low contrast, washed out colors, "
+       "excessive noise, grainy texture, distorted anatomy, extra limbs, "
+       "subtitles, captions, on-screen text, text overlay, chinese characters, letters, words, "
+       "writing, typography, watermark, logo, signature, UI, HUD")
 SIGMAS = "1.0, 0.99375, 0.9875, 0.98125, 0.975, 0.909375, 0.725, 0.421875, 0.0"
 
 
-def build(image, prompt, width, height, frames, seed, prefix, strength, fps):
+def build(image, prompt, width, height, frames, seed, prefix, strength, fps, neg=None):
     return {
         "1": {"class_type": "UNETLoader",
               "inputs": {"unet_name": "ltx-2.5-22b-distilled-transformer-bf16.safetensors",
@@ -40,7 +43,7 @@ def build(image, prompt, width, height, frames, seed, prefix, strength, fps):
         "3": {"class_type": "VAELoader", "inputs": {"vae_name": "ltx-2.5-video-vae-conv-bf16.safetensors"}},
         "4": {"class_type": "VAELoader", "inputs": {"vae_name": "ltx-2.5-audio-vae-bf16.safetensors"}},
         "5": {"class_type": "CLIPTextEncode", "inputs": {"text": prompt, "clip": ["2", 0]}},
-        "6": {"class_type": "CLIPTextEncode", "inputs": {"text": NEG, "clip": ["2", 0]}},
+        "6": {"class_type": "CLIPTextEncode", "inputs": {"text": neg or NEG, "clip": ["2", 0]}},
         "7": {"class_type": "LTXVConditioning",
               "inputs": {"positive": ["5", 0], "negative": ["6", 0], "frame_rate": float(fps)}},
         "8": {"class_type": "LoadImage", "inputs": {"image": image}},
@@ -87,6 +90,7 @@ def main():
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--strength", type=float, default=1.0)
     ap.add_argument("--prefix", default="ltx_spike")
+    ap.add_argument("--neg", default=None, help="override the negative prompt")
     ap.add_argument("--out", default=None)
     args = ap.parse_args()
 
@@ -95,7 +99,7 @@ def main():
     shutil.copyfile(args.image, os.path.join(COMFY, "input", name))
 
     graph = build(name, args.prompt, args.width, args.height, args.frames,
-                  args.seed, args.prefix, args.strength, args.fps)
+                  args.seed, args.prefix, args.strength, args.fps, args.neg)
     data = json.dumps({"prompt": graph, "client_id": "ltx"}).encode()
     req = urllib.request.Request(HOST + "/prompt", data=data,
                                  headers={"Content-Type": "application/json"})

@@ -247,3 +247,63 @@ $HV/bin/python h3_ref2va/diffusers_ref2va.py \
 - 项目 `/home/acm/paul_nv/cat` 与 ComfyUI(`env/comfy`)、`~/work/models` 均完好
 - **LTX-2.5 路线不受影响**（跑在 ComfyUI）
 - 若要再用 H3，需要重建 venv；转写已改用 `env/comfy`（已装 soundfile）
+
+---
+
+# 附四：《嘟嘟的一天》v2 修复（字幕 + 连贯性）
+
+## 1. 字幕问题（用户反馈）
+
+**现象**：字幕与语音错位约 3 秒；且画面里出现"双字幕"。
+
+**根因 A — 时序**：LTX 自己决定说话时机，而旧字幕是按"每镜固定 0.6s 起、分两段"硬编码的。
+- 实测 02 镜：旧字幕 0.6–9.5s / 10.5–19.0s；真实语音 0.0–6.12s / 7.5–18.28s
+
+**根因 B — 烧字**：`gen_shots.py` 把中文台词原文写进了 LTX prompt，**LTX 把 prompt 里的中文画成了屏幕文字**（乱码，如"炖乎平的主玉来和和片"），与后期字幕叠加成"双字幕"。15 镜几乎全部中招。
+
+**修复**：
+- `gen_subs.py`：改用**能量 VAD** 定位真实语音段（Whisper 定时会在音乐/环境音上幻觉，已弃用），再把剧本台词按顺序映射；并按台词长度估算给上限。实测 02 镜对齐到 0.12–6.05 / 9.68–17.33，与语音吻合。
+- 排版：中文 34→29、英文 20→22、底部边距 40→56；中英拆成两个独立事件（不再用 `\rEN`）；标题卡 `Alignment` 5→8（原来错用了"垂直居中"）。
+- **LTX 负面提示**加入 `subtitles, captions, on-screen text, chinese characters, letters, writing, typography, watermark, logo`（`comfy_ltx_i2v.py` / `comfy_ltx_flf2v.py` 默认）。
+- 验证：强化负面后重出 13 镜，烧字消失，台词完整保留（转写"那明天继续努力先把晚饭吃完嗯嗯今天的南瓜最好吃"）→ **15 镜全部重出**。
+
+## 2. 连贯性
+
+- **统一调色**：`post_production.py` 先用 `signalstats` 量每镜平均亮度，再按 `eq=brightness` 向全片均值微调（钳制 ±0.02）+ 轻微提饱和。实测各镜 luma 82.9–140.2 → 均值 99.4。
+  - 坑：`metadata=print` 走 **info** 日志级，`-v error` 会把它吞掉，导致 luma 全返回默认 128（调色静默失效）。
+- **首尾帧续接**：新增 `comfy_ltx_flf2v.py`（按官方 `video_ltx2_5_flf2v` 模板：`LTXVAddGuide(frame_idx=0/-1)` → 采样 → `LTXVCropGuides` 裁 guide；注意用 `SamplerCustomAdvanced.denoised_output`，而 i2v 用 `output`）。
+- **场景定妆图**：新增 `gen_scenes.py`（7 个地点，无角色的空镜参考）→ `refs/scene/`。
+- **run.sh** 新增命令：`flf2v`、`subs`。
+
+## 3. 复现
+
+```bash
+./run.sh serve
+./run.sh shots          # 15 镜（负面提示已含去文字项）
+./run.sh subs           # VAD 对齐字幕 → video/post/subs.ass
+./run.sh post           # 拼接 + 调色 + 字幕栏 + BGM + 双语字幕
+```
+
+## 4. 关于"烧字"的最终结论（实测）
+
+LTX 会把 prompt 里的中文台词当字幕烧进画面。逐项排除后的结论：
+
+| 做法 | 画面 | 语音 |
+|---|---|---|
+| 中文台词 + 强化负面 | ❌ 出字 | ✅ 正确 |
+| 负面里写该句中文 | ❌ 出字 | ✅ 正确 |
+| 去冒号/标签（仅留中文） | ❌ 出字 | ✅ 正确 |
+| 换 seed 43/44/45/46 | ❌ 四连出字 | ✅ 正确 |
+| prompt 完全不含中文 | ✅ 干净 | ❌ 胡话 |
+
+→ 有中文提示才有正确中文语音，也就难免烧字。**兜底**：`post_production.py` 默认加底部深色字幕栏
+（`--no-band` 关闭）。彻底方案（未做）：`LTXVReferenceAudio` 参考语音 + 无中文 prompt，每镜两遍生成。
+
+## 5. 本轮产物
+
+| 文件 | 时长/规格 |
+|---|---|
+| `video/dudu_full.mp4` | 300.16s，960×544，h264+aac，46.8 MiB |
+| `video/shots/*.mp4` | 15 镜全部重出（含强化负面） |
+| `video/shots_v1_withtext/` | 旧版备份（未入库） |
+| `refs/scene/` | 场景定妆图（`gen_scenes.py`，待跑） |

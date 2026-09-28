@@ -28,3 +28,10 @@ video/known_good_*
 video/*_frames.png
 video/*_grid.png
 video/*.wav
+
+# scratch renders from the text-artifact investigation
+video/shots_v1_withtext/
+video/s04_*.mp4
+video/t04*.mp4
+video/test13.mp4
+video/ltx_*.mp4
