@@ -18,6 +18,34 @@
 
 ---
 
+## 快速开始（一键）
+
+```bash
+git clone git@github.com:lipaul/cat_movie.git
+cd cat_movie
+
+./setup.sh            # 建 env/comfy + env/h3、接线模型、自检
+./run.sh serve        # 后台启动 ComfyUI
+
+# 出图 → 关键帧 → 出视频 → 后期
+./run.sh t2i    --prompt "..." --width 1024 --height 576 --seed 5 --out refs/story/x.png
+./run.sh ltx    --image refs/story/x.png --prompt "..." --frames 481 --out video/x.mp4
+./run.sh shots               # 批量逐镜（按 gen_shots.py 的镜头表）
+./run.sh post                # 拼接 + BGM + 中英字幕
+./run.sh inspect video/x.mp4 --transcribe --lang zh
+```
+
+| 脚本 | 作用 |
+|---|---|
+| `setup.sh` | 从零建环境：`env/comfy`（ComfyUI+LTX）、`env/h3`（MiniMax-H3）、模型接线、自检 |
+| `run.sh` | 命令入口：`serve / stop / status / verify / t2i / keyframes / ltx / shots / post / inspect / ref2va` |
+
+**选项**：`./setup.sh --no-h3`（只建 ComfyUI/LTX）·`--download`（下载缺失模型，很大）·`--no-link`·`--no-verify`
+**前置**：`uv`、`git`、`ffmpeg`（需含 `libass` 才能烧字幕）、NVIDIA GPU。
+模型默认从 `$WORK_MODELS`（默认 `~/work/models`）**软链**，不重复下载。
+
+---
+
 ## 1. 硬件与环境（实测）
 
 | 项 | 值 |
@@ -36,6 +64,8 @@
 ---
 
 ## 2. 一次性准备
+
+> 本章已由 **`./setup.sh`** 自动完成；下面是手动步骤，便于理解或按需定制。
 
 ### 2.1 模型
 
@@ -274,6 +304,8 @@ env/comfy/bin/python h3_ref2va/inspect_av.py video/shots/02_wakeup_talk.mp4 --tr
 ```
 /home/acm/paul_nv/cat/
 ├── README.md                    # 本文件
+├── setup.sh                     # 一键建环境（env/comfy + env/h3 + 模型接线 + 自检）
+├── run.sh                       # 命令入口（serve/stop/status/t2i/ltx/shots/post/inspect/ref2va）
 ├── ComfyUI/                     # ComfyUI（git clone）
 ├── env/comfy/                   # ComfyUI venv（torch cu128）
 ├── models/flux2/                # FLUX.2 fp8 权重
