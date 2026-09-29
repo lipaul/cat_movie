@@ -393,10 +393,30 @@ env/comfy/bin/python h3_ref2va/inspect_av.py video/x.mp4 --transcribe --lang zh
 
 即：**要正确的中文语音就必须把中文写进 prompt，也就难免被烧成画面文字**。
 
-当前采用**确定性兜底**：
+当前采用**确定性兜底**，字幕栏可配置：
 
-- `post_production.py` 默认在画面底部叠一条深色渐变**字幕栏**（`--no-band` 可关），用来盖住 LTX 烧进去的文字，同时给双语字幕一个稳定的可读背景
-- 更彻底的方案（未实施）：用 `LTXVReferenceAudio` 传入参考语音，让 prompt 完全不含中文 → 干净画面 + 指定台词（代价是每镜两遍生成）
+```bash
+# 默认：底部渐变字幕栏（高 150px，底部不透明度 0.96）
+env/comfy/bin/python h3_ref2va/post_production.py
+
+# 纯黑底 / 自定义高度与透明度
+... --band solid --band-height 120 --band-alpha 0.85
+
+# 不要字幕栏（能看到 LTX 烧进去的字）
+... --band none
+
+# 试验：inpaint 擦字（保留语音/口型，但纹理背景会留糊块）
+... --deghost
+```
+
+| 模式 | 效果 |
+|---|---|
+| `--band gradient`（默认） | 渐变字幕栏，无糊块，干净 |
+| `--band solid` | 纯黑条，最干净但最遮挡 |
+| `--band none` | 不遮挡，烧字可见 |
+| `--deghost` | 真擦除，纹理区有糊块；不建议单独用 |
+
+**为什么不能"既保台词又无烧字"**：LTX 的 `LTXVReferenceAudio` 只迁移**音色**不迁移**内容**，所以"参考语音 + 无中文 prompt"无法指定台词；而 prompt 不含中文时语音会变成胡话。要彻底干净只能放弃 LTX 的口型同步，改用外部 TTS 配音。
 
 判断某镜是否被烧字：抽帧看**下三分之一**有没有非预期文字。
 

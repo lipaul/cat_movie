@@ -35,3 +35,6 @@ video/s04_*.mp4
 video/t04*.mp4
 video/test13.mp4
 video/ltx_*.mp4
+
+# deghost intermediates
+video/post/deghost/

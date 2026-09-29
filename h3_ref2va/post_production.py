@@ -39,6 +39,41 @@ def ts(t: float) -> str:
     return f"{h}:{m:02d}:{s:05.2f}"
 
 
+def deghost_video(src, dst, y0=396, thr=178, toph=22, dil=2, radius=5):
+    """Inpaint LTX's baked-in text out of a shot (keeps the original audio)."""
+    import cv2
+    cap = cv2.VideoCapture(src)
+    fps = cap.get(cv2.CAP_PROP_FPS) or 24
+    w = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+    h = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+    tmp = dst + ".v.mp4"
+    vw = cv2.VideoWriter(tmp, cv2.VideoWriter_fourcc(*"mp4v"), fps, (w, h))
+    ktop = np.ones((7, 7), np.uint8)
+    kdil = np.ones((3, 3), np.uint8)
+    n = 0
+    while True:
+        ok, frame = cap.read()
+        if not ok:
+            break
+        g = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        band = g[y0:, :]
+        th = cv2.morphologyEx(band, cv2.MORPH_TOPHAT, ktop)
+        m = ((band > thr) & (th > toph)).astype(np.uint8) * 255
+        m = cv2.dilate(m, kdil, iterations=dil)
+        mask = np.zeros(g.shape, np.uint8)
+        mask[y0:, :] = m
+        vw.write(cv2.inpaint(frame, mask, radius, cv2.INPAINT_TELEA))
+        n += 1
+    cap.release()
+    vw.release()
+    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", tmp, "-i", src,
+                    "-map", "0:v", "-map", "1:a", "-c:v", "libx264", "-crf", "18",
+                    "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "192k", "-shortest", dst],
+                   check=True)
+    os.remove(tmp)
+    return n
+
+
 def mean_luma(path: str) -> float:
     """Mean luma (0-255) of a shot, via signalstats YAVG (1 sample/second)."""
     out = subprocess.run(
@@ -81,8 +116,15 @@ def main():
     ap.add_argument("--grade-strength", type=float, default=0.5,
                     help="0=none, 1=fully match the film mean (clamped to +-0.02)")
     ap.add_argument("--no-subs", action="store_true")
-    ap.add_argument("--no-band", action="store_true",
-                    help="skip the bottom gradient (it hides LTX's baked-in text)")
+    ap.add_argument("--band", default="gradient", choices=["gradient", "solid", "none"],
+                    help="subtitle bar: gradient (default) / solid black / none")
+    ap.add_argument("--band-height", type=int, default=150,
+                    help="bar height in pixels, measured from the bottom (default 150)")
+    ap.add_argument("--band-alpha", type=float, default=0.96,
+                    help="opacity at the bottom of the bar, 0..1 (default 0.96)")
+    ap.add_argument("--deghost", action="store_true",
+                    help="experimental: inpaint LTX's baked-in text out of each shot "
+                         "(may leave smudges on textured backgrounds)")
     a = ap.parse_args()
 
     os.makedirs(WORK, exist_ok=True)
@@ -90,6 +132,17 @@ def main():
     for s in shots:
         if not os.path.isfile(s):
             raise SystemExit(f"missing shot: {s}")
+
+    if a.deghost:
+        dh = os.path.join(WORK, "deghost")
+        os.makedirs(dh, exist_ok=True)
+        print("  deghosting (inpaint) ...")
+        for i, n in enumerate(ORDER):
+            src = os.path.join(SHOTS, f"{n}.mp4")
+            dst = os.path.join(dh, f"{n}.mp4")
+            nf = deghost_video(src, dst)
+            print(f"    [{n}] {nf} frames", flush=True)
+            shots[i] = dst
 
     total = sum(dur(s) for s in shots)
     print(f"total {total:.2f}s, {len(shots)} shots")
@@ -126,11 +179,21 @@ def main():
     chain.append("".join(f"[a{i}]" for i in range(N)) + f"concat=n={N}:v=0:a=1[acat]")
 
     vcur = "[vcat]"
-    if not a.no_band:
-        # a soft bottom gradient: hides LTX's occasional baked-in text and gives
-        # the subtitles a consistent readable backdrop
-        steps = [(374, 20, 0.40), (394, 18, 0.72), (412, 18, 0.90), (430, 114, 0.96)]
-        band = ",".join(f"drawbox=x=0:y={y}:w=iw:h={h}:color=black@{al}:t=fill" for y, h, al in steps)
+    if a.band != "none" and a.band_height > 0:
+        H = min(a.band_height, 544)
+        top = 544 - H
+        if a.band == "solid":
+            band = f"drawbox=x=0:y={top}:w=iw:h={H}:color=black@{a.band_alpha:.3f}:t=fill"
+        else:
+            steps_n = 5
+            step_h = max(1, H // steps_n)
+            parts = []
+            for k in range(steps_n):
+                y = top + k * step_h
+                h = (H - k * step_h) if k == steps_n - 1 else step_h
+                al = a.band_alpha * (k + 1) / steps_n
+                parts.append(f"drawbox=x=0:y={y}:w=iw:h={h}:color=black@{al:.3f}:t=fill")
+            band = ",".join(parts)
         chain.append(f"{vcur}{band}[vband]")
         vcur = "[vband]"
     if subs:
